@@ -1,0 +1,22 @@
+--FIT5148b
+create or replace TRIGGER UPDATE_MEMBERSHIP_CREDIT 
+AFTER INSERT ON PAYMENT 
+for each row
+declare 
+  NEW_CREDIT  NUMBER;
+NEW_TIER  customer.membership_tier%type;
+BEGIN
+        update booking
+        set payment_status = 'paid'
+        where booking_id = :new.booking_id;
+        
+        update customer
+        set membership_credit = :new.payment_amount + membership_credit
+        where customer_id = (select customer_id from booking where booking_id = :new.booking_id);
+       
+       select membership_credit into NEW_CREDIT from customer where customer_id = (select customer_id from booking where booking_id = :new.booking_id);
+       CHECK_CREDIT(NEW_CREDIT,NEW_TIER) ;
+       update customer
+       set membership_tier = new_tier
+       where customer_id = (select customer_id from booking where booking_id = :new.booking_id); 
+END;
