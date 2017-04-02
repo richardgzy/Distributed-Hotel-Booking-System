@@ -38,7 +38,7 @@ CREATE TABLE booking
     payment_status VARCHAR2 (10) NOT NULL
   ) ;
 ALTER TABLE booking ADD CONSTRAINT check_out_date_check CHECK ( check_out_date > check_in_date) ;
-ALTER TABLE booking ADD CONSTRAINT payment_status_check CHECK ( payment_status IN ('paid','unpaid','pending')) ;
+ALTER TABLE booking ADD CONSTRAINT payment_status_check CHECK ( payment_status IN ('paid','unpaid','cancelled')) ;
 ALTER TABLE booking ADD CONSTRAINT booking_PK PRIMARY KEY ( booking_id, hotel_id, room_num ) ;
 
 
